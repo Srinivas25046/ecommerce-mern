@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import api from "../utils/api";
 
-const Home = () => {
+const Products = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
+  const [keyword, setKeyword] = useState(searchParams.get("keyword") || "");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
-        const { data } = await api.get("/products");
-        setProducts(data.slice(0, 8));
+        const { data } = await api.get(`/products?keyword=${keyword}`);
+        setProducts(data);
       } catch (error) {
         console.log(error);
       } finally {
@@ -18,17 +21,31 @@ const Home = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [keyword]);
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    setSearchParams(keyword ? { keyword } : {});
+  };
 
   return (
     <div>
-      <h1>Welcome to ShopEasy</h1>
-      <p>Best deals on electronics, fashion, home essentials and more.</p>
+      <h2>All Products</h2>
 
-      <h2>Featured Products</h2>
+      <form onSubmit={submitHandler}>
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+        />
+        <button type="submit">Search</button>
+      </form>
 
       {loading ? (
         <p>Loading...</p>
+      ) : products.length === 0 ? (
+        <p>No products found.</p>
       ) : (
         <div>
           {products.map((product) => (
@@ -37,6 +54,7 @@ const Home = () => {
               <h3>
                 <Link to={`/product/${product._id}`}>{product.name}</Link>
               </h3>
+              <p>{product.category}</p>
               <p>₹{product.price}</p>
             </div>
           ))}
@@ -46,4 +64,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Products;
