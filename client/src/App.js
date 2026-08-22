@@ -8,6 +8,9 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Payment from "./pages/Payment";
+import MyOrders from "./pages/MyOrders";
+import PrivateRoute from "./components/PrivateRoute";
 
 function App() {
   return (
@@ -21,7 +24,12 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
+
+          <Route element={<PrivateRoute />}>
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/payment/:orderId" element={<Payment />} />
+            <Route path="/myorders" element={<MyOrders />} />
+          </Route>
         </Routes>
       </main>
       <Footer />
