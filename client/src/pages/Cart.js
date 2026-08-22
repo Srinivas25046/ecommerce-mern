@@ -25,7 +25,7 @@ const Cart = () => {
       ) : (
         <div>
           {cartItems.map((item) => (
-            <div key={item._id} style={{ display: "flex", gap: "10px", alignItems: "center", marginBottom: "10px" }}>
+            <div key={item._id} className="cart-item">
               <img src={item.image} alt={item.name} width="60" />
               <Link to={`/product/${item._id}`}>{item.name}</Link>
               <p>₹{item.price}</p>

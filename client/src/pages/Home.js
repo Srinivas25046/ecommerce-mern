@@ -30,9 +30,9 @@ const Home = () => {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div>
+        <div className="product-grid">
           {products.map((product) => (
-            <div key={product._id} style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
+            <div key={product._id} className="product-card">
               <img src={product.image} alt={product.name} width="150" />
               <h3>
                 <Link to={`/product/${product._id}`}>{product.name}</Link>
